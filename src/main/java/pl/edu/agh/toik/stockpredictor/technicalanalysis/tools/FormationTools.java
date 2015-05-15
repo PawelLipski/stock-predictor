@@ -6,6 +6,8 @@ import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.CandleType;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.Formation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import static pl.edu.agh.toik.stockpredictor.technicalanalysis.tools.CandleTools.isGreaterThan;
@@ -16,9 +18,102 @@ import static pl.edu.agh.toik.stockpredictor.technicalanalysis.tools.CandleTools
  */
 public class FormationTools {
 
-    public static List<Formation> getFormations(List<Candle> candles) {
-        //TODO: IMPLIEMENT IT!!!! :D :D :D
-        return new ArrayList<Formation>();
+public static List<Formation> getFormations(List<Candle> candles) {
+        List<Formation> singleCandleFormations = getSingleCandlesFormations(candles);
+        List<Formation> twoCandlesFormations = getTwoCandlesFormations(candles);
+        List<Formation> fourCandlesFormations = getFourCandlesFormations(candles);
+        LinkedList<Formation> formations = new LinkedList<Formation>();
+        formations.addAll(singleCandleFormations);
+        formations.addAll(twoCandlesFormations);
+        formations.addAll(fourCandlesFormations);
+        return formations;
+    }
+
+    private static List<Formation> getSingleCandlesFormations(
+            List<Candle> candles) {
+        LinkedList<Formation> formations = new LinkedList<Formation>();
+        for (int i = 0; i < candles.size(); i++) {
+            Candle candle = candles.get(i);
+            if (isHossaReversion(candle)) {
+
+                formations.add(new Formation(candle.getDate(),
+                        candle.getDate(), FormationType.HOSSA_REVERSION,
+                        new LinkedList<Candle>(Arrays.asList(candle))));
+            } else if (isBessaReversion(candle)) {
+                formations.add(new Formation(candle.getDate(),
+                        candle.getDate(), FormationType.BESSA_REVERSION,
+                        new LinkedList<Candle>(Arrays.asList(candle))));
+            }
+        }
+        return formations;
+    }
+
+    private static List<Formation> getTwoCandlesFormations(List<Candle> candles) {
+        LinkedList<Formation> formations = new LinkedList<Formation>();
+        if (candles.size() < 2) {
+            return formations;
+        }
+        ArrayList<Candle> current = new ArrayList<Candle>();
+        current.add(candles.get(0));
+        current.add(candles.get(1));
+        for (int i = 2; i < candles.size() + 1; i++) {
+            Candle previousCandle = current.get(0);
+            Candle nextCandle = current.get(1);
+            if (isEngulfingHossaPattern(previousCandle, nextCandle)) {
+                formations.add(new Formation(previousCandle.getDate(),
+                        nextCandle.getDate(),
+                        FormationType.ENGULFING_HOSSA_PATTERN,
+                        new LinkedList<Candle>(Arrays.asList(previousCandle,
+                                nextCandle))));
+            } else if (isEngulfingBessaPattern(previousCandle, nextCandle)) {
+                formations.add(new Formation(previousCandle.getDate(),
+                        nextCandle.getDate(),
+                        FormationType.ENGULFING_BESSA_PATTERN,
+                        new LinkedList<Candle>(Arrays.asList(previousCandle,
+                                nextCandle))));
+            }
+            if (i < candles.size()) {
+                current.set(0, current.get(1));
+                current.set(1, candles.get(i));
+            }
+        }
+        return formations;
+    }
+
+    private static List<Formation> getFourCandlesFormations(List<Candle> candles) {
+        LinkedList<Formation> formations = new LinkedList<Formation>();
+        if (candles.size() < 4) {
+            return formations;
+        }
+        ArrayList<Candle> current = new ArrayList<Candle>();
+        current.add(candles.get(0));
+        current.add(candles.get(1));
+        current.add(candles.get(2));
+        current.add(candles.get(3));
+        for (int i = 4; i < candles.size() + 1; i++) {
+            Candle candle1 = current.get(0);
+            Candle candle2 = current.get(1);
+            Candle candle3 = current.get(2);
+            Candle candle4 = current.get(3);
+            if (isBullishKickerPattern(candle1, candle2, candle3, candle4)) {
+                formations.add(new Formation(candle1.getDate(), candle4
+                        .getDate(), FormationType.BULLISH_KICKER_PATTERN,
+                        new LinkedList<Candle>(Arrays.asList(candle1, candle2,
+                                candle3, candle4))));
+            } else if (isBearishKickerPattern(candle1, candle2, candle3, candle4)) {
+                formations.add(new Formation(candle1.getDate(), candle4
+                        .getDate(), FormationType.BEARISH_KICKER_PATTERN,
+                        new LinkedList<Candle>(Arrays.asList(candle1, candle2,
+                                candle3, candle4))));
+            }
+            if (i < candles.size()) {
+                current.set(0, current.get(1));
+                current.set(1, current.get(2));
+                current.set(2, current.get(3));
+                current.set(3, candles.get(i));
+            }
+        }
+        return formations;
     }
 
     private static boolean isHossaReversion(Candle candle) {
