@@ -1,4 +1,4 @@
-package com.springapp.controller;
+package pl.edu.agh.toik.stockpredictor;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
