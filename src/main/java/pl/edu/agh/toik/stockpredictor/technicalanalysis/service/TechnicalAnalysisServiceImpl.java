@@ -3,7 +3,7 @@ package pl.edu.agh.toik.stockpredictor.technicalanalysis.service;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.chart.CandlestickChart;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.Candle;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.ListedCompany;
-import pl.edu.agh.toik.stockpredictor.technicalanalysis.serializer.ShareData;
+import pl.edu.agh.toik.stockpredictor.technicalanalysis.serializer.StockQuote;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.tools.CandleTools;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.tools.DateTools;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.tools.FormationTools;
@@ -16,9 +16,9 @@ import java.util.*;
  */
 public class TechnicalAnalysisServiceImpl implements ITechnicalAnalysisService {
 
-    private static Comparator<ShareData> SHARE_DATA_COMPARATOR = new Comparator<ShareData>() {
+    private static Comparator<StockQuote> SHARE_DATA_COMPARATOR = new Comparator<StockQuote>() {
         @Override
-        public int compare(ShareData o1, ShareData o2) {
+        public int compare(StockQuote o1, StockQuote o2) {
             return o1.getDate().compareTo(o2.getDate());
         }
     };
@@ -31,10 +31,10 @@ public class TechnicalAnalysisServiceImpl implements ITechnicalAnalysisService {
     };
 
     @Override
-    public List<Candle> getCandles(List<ShareData> shareData) {
+    public List<Candle> getCandles(List<StockQuote> shareData) {
         createHourAccurateDates(shareData);
         Collections.sort(shareData, SHARE_DATA_COMPARATOR);
-        Map<Date, List<ShareData>> dayToShareDataMap = createDayToListOfShareDataMap(shareData);
+        Map<Date, List<StockQuote>> dayToShareDataMap = createDayToListOfShareDataMap(shareData);
         return createCandles(dayToShareDataMap);
     }
 
@@ -50,15 +50,15 @@ public class TechnicalAnalysisServiceImpl implements ITechnicalAnalysisService {
         return candlestickChart;
     }
 
-    private void createHourAccurateDates(List<ShareData> shareData) {
-        for(ShareData sd : shareData) {
+    private void createHourAccurateDates(List<StockQuote> shareData) {
+        for(StockQuote sd : shareData) {
             sd.setDate(DateTools.getHourAccurateDate(sd.getDate()));
         }
     }
 
-    private Map<Date, List<ShareData>> createDayToListOfShareDataMap(List<ShareData> shareData) {
-        Map<Date, List<ShareData>> dayToShareDataMap = new HashMap<Date, List<ShareData>>();
-        for(ShareData sd : shareData) {
+    private Map<Date, List<StockQuote>> createDayToListOfShareDataMap(List<StockQuote> shareData) {
+        Map<Date, List<StockQuote>> dayToShareDataMap = new HashMap<Date, List<StockQuote>>();
+        for(StockQuote sd : shareData) {
             Date dayAccurateDay = DateTools.getDayAccurateDate(sd.getDate());
             if(dayToShareDataMap.containsKey(dayAccurateDay)) {
                 dayToShareDataMap.get(dayAccurateDay).add(sd);
@@ -69,16 +69,16 @@ public class TechnicalAnalysisServiceImpl implements ITechnicalAnalysisService {
         return dayToShareDataMap;
     }
 
-    private List<Candle> createCandles(Map<Date, List<ShareData>> dayToShareDataMap) {
+    private List<Candle> createCandles(Map<Date, List<StockQuote>> dayToShareDataMap) {
         List<Candle> candles = new ArrayList<Candle>();
         for(Date date : dayToShareDataMap.keySet()) {
-            List<ShareData> shareDataList = dayToShareDataMap.get(date);
+            List<StockQuote> shareDataList = dayToShareDataMap.get(date);
             Candle candle = new Candle();
             candle.setOpeningPrice(shareDataList.get(0).getValue());
             candle.setClosingPrice(shareDataList.get(shareDataList.size() - 1).getValue());
             candle.setMaxPrice(BigDecimal.ZERO);
             candle.setMinPrice(BigDecimal.ZERO);
-            for(ShareData sd : dayToShareDataMap.get(date)) {
+            for(StockQuote sd : dayToShareDataMap.get(date)) {
                 if(sd.getValue().compareTo(candle.getMaxPrice()) > 0) {
                     candle.setMaxPrice(sd.getValue());
                 }

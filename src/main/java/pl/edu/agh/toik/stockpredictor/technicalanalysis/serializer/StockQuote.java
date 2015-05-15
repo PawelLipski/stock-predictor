@@ -8,16 +8,16 @@ import java.util.Date;
 /**
  * Created by Krzysztof Kicinger on 2015-05-14.
  */
-public class ShareData {
+public class StockQuote {
 
     private ListedCompany listedCompany;
     private Date date;
     private BigDecimal value;
 
-    public ShareData() {
+    public StockQuote() {
     }
 
-    public ShareData(ListedCompany listedCompany, Date date, BigDecimal value) {
+    public StockQuote(ListedCompany listedCompany, Date date, BigDecimal value) {
         this.listedCompany = listedCompany;
         this.date = date;
         this.value = value;

@@ -3,7 +3,7 @@ package pl.edu.agh.toik.stockpredictor.technicalanalysis.service;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.chart.CandlestickChart;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.Candle;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.ListedCompany;
-import pl.edu.agh.toik.stockpredictor.technicalanalysis.serializer.ShareData;
+import pl.edu.agh.toik.stockpredictor.technicalanalysis.serializer.StockQuote;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface ITechnicalAnalysisService {
 
-    public List<Candle> getCandles(List<ShareData> shareData);
+    public List<Candle> getCandles(List<StockQuote> shareData);
 
     public CandlestickChart createCandlestickChart(ListedCompany listedCompany, List<Candle> candles);
 
