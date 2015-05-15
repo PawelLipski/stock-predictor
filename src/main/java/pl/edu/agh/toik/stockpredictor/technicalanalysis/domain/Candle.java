@@ -32,7 +32,7 @@ public class Candle {
     /**
      * Date (accurate to day) that candle represents data for
      */
-    private Date date;
+    private Date day;
     /**
      * Candle color (BLACK/WHITE/NOT_DEFINED)
      */
@@ -45,12 +45,12 @@ public class Candle {
     public Candle() {
     }
 
-    public Candle(BigDecimal maxPrice, BigDecimal minPrice, BigDecimal openingPrice, BigDecimal closingPrice, Date date) {
+    public Candle(BigDecimal maxPrice, BigDecimal minPrice, BigDecimal openingPrice, BigDecimal closingPrice, Date day) {
         this.maxPrice = maxPrice;
         this.minPrice = minPrice;
         this.openingPrice = openingPrice;
         this.closingPrice = closingPrice;
-        this.date = date;
+        this.day = day;
         this.color = CandleTools.getCandleColor(this);
         this.type = CandleTools.getCandleType(this);
     }
@@ -87,12 +87,12 @@ public class Candle {
         this.closingPrice = closingPrice;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getDay() {
+        return day;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDay(Date day) {
+        this.day = day;
     }
 
     public CandleColor getColor() {

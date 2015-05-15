@@ -19,14 +19,14 @@ public class TechnicalAnalysisServiceImpl implements ITechnicalAnalysisService {
     private static Comparator<StockQuote> SHARE_DATA_COMPARATOR = new Comparator<StockQuote>() {
         @Override
         public int compare(StockQuote o1, StockQuote o2) {
-            return o1.getDate().compareTo(o2.getDate());
+            return o1.getDateAndTime().compareTo(o2.getDateAndTime());
         }
     };
 
     private static Comparator<Candle> CANDLE_COMPARATOR = new Comparator<Candle>() {
         @Override
         public int compare(Candle o1, Candle o2) {
-            return o1.getDate().compareTo(o2.getDate());
+            return o1.getDay().compareTo(o2.getDay());
         }
     };
 
@@ -44,26 +44,26 @@ public class TechnicalAnalysisServiceImpl implements ITechnicalAnalysisService {
         CandlestickChart candlestickChart = new CandlestickChart();
         candlestickChart.setListedCompany(listedCompany);
         candlestickChart.setCandles(candles);
-        candlestickChart.setStartDate(candles.get(0).getDate());
-        candlestickChart.setEndDate(candles.get(candles.size() - 1).getDate());
+        candlestickChart.setStartDay(candles.get(0).getDay());
+        candlestickChart.setEndDay(candles.get(candles.size() - 1).getDay());
         candlestickChart.setFormations(FormationTools.getFormations(candles));
         return candlestickChart;
     }
 
     private void createHourAccurateDates(List<StockQuote> shareData) {
         for(StockQuote sd : shareData) {
-            sd.setDate(DateTools.getHourAccurateDate(sd.getDate()));
+            sd.setDateAndTime(DateTools.getHourAccurateDate(sd.getDateAndTime()));
         }
     }
 
     private Map<Date, List<StockQuote>> createDayToListOfShareDataMap(List<StockQuote> shareData) {
         Map<Date, List<StockQuote>> dayToShareDataMap = new HashMap<Date, List<StockQuote>>();
         for(StockQuote sd : shareData) {
-            Date dayAccurateDay = DateTools.getDayAccurateDate(sd.getDate());
-            if(dayToShareDataMap.containsKey(dayAccurateDay)) {
-                dayToShareDataMap.get(dayAccurateDay).add(sd);
+            Date dayAccurateDate = DateTools.getDayAccurateDate(sd.getDateAndTime());
+            if(dayToShareDataMap.containsKey(dayAccurateDate)) {
+                dayToShareDataMap.get(dayAccurateDate).add(sd);
             } else {
-                dayToShareDataMap.put(dayAccurateDay, Arrays.asList(sd));
+                dayToShareDataMap.put(dayAccurateDate, Arrays.asList(sd));
             }
         }
         return dayToShareDataMap;
@@ -86,7 +86,7 @@ public class TechnicalAnalysisServiceImpl implements ITechnicalAnalysisService {
                     candle.setMinPrice(sd.getValue());
                 }
             }
-            candle.setDate(date);
+            candle.setDay(date);
             candle.setColor(CandleTools.getCandleColor(candle));
             candle.setType(CandleTools.getCandleType(candle));
             candles.add(candle);

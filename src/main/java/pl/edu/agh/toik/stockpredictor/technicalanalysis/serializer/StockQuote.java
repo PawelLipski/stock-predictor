@@ -11,15 +11,15 @@ import java.util.Date;
 public class StockQuote {
 
     private ListedCompany listedCompany;
-    private Date date;
+    private Date dateAndTime;
     private BigDecimal value;
 
     public StockQuote() {
     }
 
-    public StockQuote(ListedCompany listedCompany, Date date, BigDecimal value) {
+    public StockQuote(ListedCompany listedCompany, Date dateAndTime, BigDecimal value) {
         this.listedCompany = listedCompany;
-        this.date = date;
+        this.dateAndTime = dateAndTime;
         this.value = value;
     }
 
@@ -31,14 +31,6 @@ public class StockQuote {
         this.listedCompany = listedCompany;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
     public BigDecimal getValue() {
         return value;
     }
@@ -46,4 +38,12 @@ public class StockQuote {
     public void setValue(BigDecimal value) {
         this.value = value;
     }
+
+	public Date getDateAndTime() {
+		return dateAndTime;
+	}
+
+	public void setDateAndTime(Date dateAndTime) {
+		this.dateAndTime = dateAndTime;
+	}
 }

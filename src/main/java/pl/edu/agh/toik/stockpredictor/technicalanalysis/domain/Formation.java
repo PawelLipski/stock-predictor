@@ -13,11 +13,11 @@ public class Formation {
     /**
      * Day which formation starts in
      */
-    private final Date startDate;
+    private final Date startDay;
     /**
      * Day which formation ends in
      */
-    private final Date endDate;
+    private final Date endDay;
     /**
      * Type of formation
      */
@@ -27,19 +27,19 @@ public class Formation {
      */
     private final List<Candle> candles;
 
-    public Formation(Date startDate, Date endDate, FormationType type, List<Candle> candles) {
-        this.startDate = startDate;
-        this.endDate = endDate;
+    public Formation(Date startDay, Date endDay, FormationType type, List<Candle> candles) {
+        this.startDay = startDay;
+        this.endDay = endDay;
         this.type = type;
         this.candles = candles;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public Date getStartDay() {
+        return startDay;
     }
 
-    public Date getEndDate() {
-        return endDate;
+    public Date getEndDay() {
+        return endDay;
     }
 
     public FormationType getType() {

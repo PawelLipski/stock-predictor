@@ -26,11 +26,11 @@ public class CandlestickChart {
     /**
      * First date that chart contains data for (accurate to day)
      */
-    private Date startDate;
+    private Date startDay;
     /**
      * Last date that chart contains data for (accurate to day)
      */
-    private Date endDate;
+    private Date endDay;
 
     public CandlestickChart() {
     }
@@ -59,20 +59,20 @@ public class CandlestickChart {
         this.formations = formations;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public Date getStartDay() {
+        return startDay;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public void setStartDay(Date startDay) {
+        this.startDay = startDay;
     }
 
-    public Date getEndDate() {
-        return endDate;
+    public Date getEndDay() {
+        return endDay;
     }
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public void setEndDay(Date endDay) {
+        this.endDay = endDay;
     }
 
 }
