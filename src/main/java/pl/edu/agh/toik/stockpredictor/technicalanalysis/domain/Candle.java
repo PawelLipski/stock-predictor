@@ -14,6 +14,10 @@ import java.util.Date;
 public class Candle {
 
     /**
+     * Company that candle belongs to
+     */
+    private ListedCompany listedCompany;
+    /**
      * Maximal stock price
      */
     private BigDecimal maxPrice;
@@ -45,7 +49,8 @@ public class Candle {
     public Candle() {
     }
 
-    public Candle(BigDecimal maxPrice, BigDecimal minPrice, BigDecimal openingPrice, BigDecimal closingPrice, Date day) {
+    public Candle(ListedCompany listedCompany, BigDecimal maxPrice, BigDecimal minPrice, BigDecimal openingPrice, BigDecimal closingPrice, Date day) {
+        this.listedCompany = listedCompany;
         this.maxPrice = maxPrice;
         this.minPrice = minPrice;
         this.openingPrice = openingPrice;
@@ -53,6 +58,14 @@ public class Candle {
         this.day = day;
         this.color = CandleTools.getCandleColor(this);
         this.type = CandleTools.getCandleType(this);
+    }
+
+    public ListedCompany getListedCompany() {
+        return listedCompany;
+    }
+
+    public void setListedCompany(ListedCompany listedCompany) {
+        this.listedCompany = listedCompany;
     }
 
     public BigDecimal getMaxPrice() {

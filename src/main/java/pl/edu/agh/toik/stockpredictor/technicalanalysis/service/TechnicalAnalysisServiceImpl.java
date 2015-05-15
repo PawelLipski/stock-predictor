@@ -89,6 +89,7 @@ public class TechnicalAnalysisServiceImpl implements ITechnicalAnalysisService {
             candle.setDay(date);
             candle.setColor(CandleTools.getCandleColor(candle));
             candle.setType(CandleTools.getCandleType(candle));
+            candle.setListedCompany(shareDataList.get(0).getListedCompany());
             candles.add(candle);
         }
         return candles;
