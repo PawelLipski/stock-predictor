@@ -2,10 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.springapp</groupId>
-	<artifactId>MavenSpringApp</artifactId>
+	<artifactId>StockPredictor</artifactId>
 	<packaging>war</packaging>
 	<version>1.0-SNAPSHOT</version>
-	<name>MavenSpringApp Maven Webapp</name>
+	<name>Stock Predictor Webapp</name>
 	<url>http://maven.apache.org</url>
 
 	<!-- http://viralpatel.net/blogs/spring3-mvc-hibernate-maven-tutorial-eclipse-example/ -->
@@ -195,7 +195,7 @@
 	</properties>
 
 	<build>
-		<finalName>MavenSpringApp</finalName>
+		<finalName>StockPredictor</finalName>
 
 		<plugins>
 			<plugin>
