@@ -119,6 +119,10 @@ public class Candle {
     public CandleType getType() {
         return type;
     }
+    
+    public Date getDate(){
+        return day;
+    }
 
     public void setType(CandleType type) {
         this.type = type;

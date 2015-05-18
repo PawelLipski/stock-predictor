@@ -13,4 +13,45 @@
 
     <mvc:resources mapping="/static/**" location="/static/" />
 
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+        destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://sql5.freesqldatabase.com:3306/sql577646" />
+        <property name="username" value="sql577646" />
+        <property name="password" value="iS2*bE3*" />
+    </bean>
+    
+    <bean id="sessionFactory"
+        class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="annotatedClasses">
+            <list>
+                <value>pl.edu.agh.toik.stockpredictor.core.persistence.model.CompanyEntity</value>
+                <value>pl.edu.agh.toik.stockpredictor.core.persistence.model.StockQuoteEntity</value>
+                <value>pl.edu.agh.toik.stockpredictor.core.persistence.model.CandleEntity</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.current_session_context_class">thread</prop>
+                <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.hbm2ddl.auto">create</prop>
+            </props>
+        </property>
+    </bean>
+    
+    <bean id="candleDAO" class="pl.edu.agh.toik.stockpredictor.core.dao.impl.hbm.CandleDAOImpl">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+    
+    <bean id="stockQuoteDAO" class="pl.edu.agh.toik.stockpredictor.core.dao.impl.hbm.StockQuoteDAOImpl">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+    
+    <bean id="core" class="pl.edu.agh.toik.stockpredictor.core.Core" >
+        <property name="candleDAO" ref="candleDAO" />
+        <property name="stockQuoteDAO" ref="stockQuoteDAO" />
+    </bean>
+    
 </beans>

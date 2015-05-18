@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.FormationType;
 
 import static pl.edu.agh.toik.stockpredictor.technicalanalysis.tools.CandleTools.isGreaterThan;
 import static pl.edu.agh.toik.stockpredictor.technicalanalysis.tools.CandleTools.isLowerThan;

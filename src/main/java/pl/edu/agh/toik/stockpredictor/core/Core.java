@@ -2,19 +2,60 @@ package pl.edu.agh.toik.stockpredictor.core;
 
 import java.util.Date;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import pl.edu.agh.toik.stockpredictor.core.dao.CandleDAO;
+import pl.edu.agh.toik.stockpredictor.core.dao.StockQuoteDAO;
+import pl.edu.agh.toik.stockpredictor.prediction.IPredictionService;
 
 import pl.edu.agh.toik.stockpredictor.prediction.Prediction;
 import pl.edu.agh.toik.stockpredictor.prediction.PredictionParams;
+import pl.edu.agh.toik.stockpredictor.technicalanalysis.chart.CandlestickChart;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.Candle;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.ListedCompany;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.serializer.StockQuote;
+import pl.edu.agh.toik.stockpredictor.technicalanalysis.service.ITechnicalAnalysisService;
 
 
 public class Core implements ICoreCandlestickChartService, ICorePredictionService, 
 		ICoreStockQuoteReadService, ICoreStockQuoteWriteService {
-	
+    
+        CandleDAO daoCandle;  
+        StockQuoteDAO daoStock;
+        ITechnicalAnalysisService analService;
+        IPredictionService predService;
+    
+        @Autowired
+        public void setCandleDAO(CandleDAO candleDAO){
+            daoCandle = candleDAO;
+        }
+        @Autowired
+        public void setStockQuoteDAO(StockQuoteDAO stockDAO){
+            daoStock = stockDAO;
+        }
+        
+        public boolean candleDAOReady(){
+            return daoCandle!=null;
+        }
+        public boolean stockQuoteDAOReady(){
+            return daoStock!=null;
+        }
+        
 	@Override
-	public List<Candle> getCandlestickChart(ListedCompany listedCompany, Date dayFrom, Date dayTo) {
+	public List<Candle> getCandlestickChart(ListedCompany listedCompany, Date dayFrom, Date dayTo) 
+        {
+            List<Candle> candles;
+            
+            if(daoCandle.allCandlesPresent(listedCompany, dayTo, dayTo))  {
+                candles = daoCandle.listCandlesFor(listedCompany, dayTo, dayTo);
+            }   else {
+                candles = analService.getCandles(daoStock.getQuotesFor(listedCompany,dayFrom,dayTo));
+                daoCandle.writeCandles(candles);
+            }
+            
+            CandlestickChart chart = analService.createCandlestickChart(listedCompany, candles);
+            return chart.getCandles();
+             
+            
 	 // Szyna sprawdza, czy ma już policzone świece dla wszystkich dni od X do Y.
 	 // Jeśli nie:
 	 //     szyna -> analizy: policz mi świece dla wszystkich dni od X do Y 
@@ -26,23 +67,25 @@ public class Core implements ICoreCandlestickChartService, ICorePredictionServic
 	 // (tu już liczymy zawsze on-line - formacji NIGDY nie persystujemy)
 	 // zwróć do GUI candles oraz formations
 	 // public CandlestickChart createCandlestickChart(ListedCompany listedCompany, List<Candle> candles);
-		return null;
+		
 	}
 
 	@Override
 	public Prediction getPrediction(PredictionParams params) {
 		// TODO zaimplementuj jako: return predictionService.predict((ICoreStockQuoteReadService)this, params);
-		return null;
+		return predService.predict(this, params);
 	}
 
 	@Override
 	public void storeStockQuotes(List<StockQuote> shareData) {		
-		// TODO: zapis do bazy
+		daoStock.storeStockQuotes(shareData);
 	}
 
 	@Override
 	public List<StockQuote> getStockQuotes(ListedCompany listedCompany, Date day) {
 		// TODO: odczyt z bazy dla danej spolki i dnia
-		return null;
+		return daoStock.getQuotesFor(listedCompany, day, day);
 	}
+        
+       
 }
