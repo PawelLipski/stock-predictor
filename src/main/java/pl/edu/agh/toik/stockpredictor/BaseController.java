@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import pl.edu.agh.toik.stockpredictor.core.Core;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.ListedCompany;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.serializer.StockQuote;
@@ -29,6 +31,12 @@ public class BaseController {
         core = c;
     }
     
+    @RequestMapping(value = "/bar")
+	@ResponseBody
+	public int foo() { 
+		return 42;
+	}
+    
     @RequestMapping("/")
     public String getIndexPage() {
         List<StockQuote> list = new LinkedList();
@@ -40,11 +48,11 @@ public class BaseController {
         list.add(new StockQuote(lc,
                                 new Date(System.currentTimeMillis()+60*60*1000),
                                 new BigDecimal(BigInteger.ONE)));
-        core.storeStockQuotes(list);
+        /*core.storeStockQuotes(list);
         
         List<StockQuote> ls = core.getStockQuotes(lc, new Date(System.currentTimeMillis()));
         
-        l.info("Stock count: "+ls.size());
+        l.info("Stock count: "+ls.size());*/
         
         return "static/index.html";
     }
