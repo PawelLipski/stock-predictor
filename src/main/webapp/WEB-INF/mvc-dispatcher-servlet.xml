@@ -54,7 +54,7 @@
         <property name="stockQuoteDAO" ref="stockQuoteDAO" />
     </bean>
  
-	<bean id="jacksonObjectMapper" class="pl.edu.agh.toik.stockpredictor.CustomJacksonObjectMapper" />
+	<bean id="jacksonObjectMapper" class="pl.edu.agh.toik.stockpredictor.rest.CustomJacksonObjectMapper" />
 
 	<bean id="jacksonSerializationConfig" class="org.codehaus.jackson.map.SerializationConfig"
 		factory-bean="jacksonObjectMapper" factory-method="getSerializationConfig" />
@@ -66,7 +66,7 @@
     	</property>
     </bean>	
 	
-	<bean class="pl.edu.agh.toik.stockpredictor.ConverterRegister">
+	<bean class="pl.edu.agh.toik.stockpredictor.rest.ConverterRegister">
         <property name="messageConverters">
             <list>
                 <ref bean="jacksonMessageConverter" />

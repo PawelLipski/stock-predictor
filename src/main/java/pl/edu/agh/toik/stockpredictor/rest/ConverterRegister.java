@@ -1,4 +1,4 @@
-package pl.edu.agh.toik.stockpredictor;
+package pl.edu.agh.toik.stockpredictor.rest;
 
 import javax.annotation.PostConstruct;
 
