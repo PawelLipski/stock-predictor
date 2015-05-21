@@ -15,7 +15,7 @@ import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.ListedCompany;
  * @author uriel
  */
 public interface CandleDAO {
-    boolean allCandlesPresent(ListedCompany company,Date fromDay,Date toDay);
-    List<Candle> listCandlesFor(ListedCompany company,Date fromDay,Date toDay);
+    boolean allCandlesPresent(ListedCompany company, Date fromDay, Date toDay);
+    List<Candle> listCandlesFor(ListedCompany company, Date fromDay, Date toDay);
     void writeCandles(List<Candle> candles);
 }

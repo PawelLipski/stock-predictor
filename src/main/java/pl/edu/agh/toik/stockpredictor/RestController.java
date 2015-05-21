@@ -20,12 +20,17 @@ import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.ListedCompany;
 @Controller
 public class RestController {	
 
-	// http://localhost:8080/StockPredictor/foo?date=2015-05-15
-	@RequestMapping(value = "/foo")
+	// For example:
+	// http://localhost:8080/StockPredictor/getCandlestickCharts?companyShortName=EXA&dayFrom=2015-05-10&dayTo=2015-05-20
+	@RequestMapping(value = "/getCandlestickCharts")
 	@ResponseBody
-	public CandlestickChart foo(@RequestParam(value="date") Date s) {
+	public CandlestickChart getCandlestickCharts(
+			@RequestParam(value="companyShortName") String companyShortName,
+			@RequestParam(value="dayFrom") Date dayFrom,
+			@RequestParam(value="dayTo") Date dayTo) {
+		
 		CandlestickChart chart = new CandlestickChart();
-		ListedCompany listedCompany = new ListedCompany("Example", "EXA");
+		ListedCompany listedCompany = new ListedCompany("", companyShortName);
 		chart.setListedCompany(listedCompany);
 		chart.setStartDay(new Date(2015, 4, 10));
 		chart.setEndDay(new Date(2015, 4, 15));

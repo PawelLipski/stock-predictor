@@ -15,69 +15,75 @@ import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.ListedCompany;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.serializer.StockQuote;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.service.ITechnicalAnalysisService;
 
+public class Core implements ICoreCandlestickChartService,
+		ICorePredictionService, ICoreStockQuoteReadService,
+		ICoreStockQuoteWriteService {
 
-public class Core implements ICoreCandlestickChartService, ICorePredictionService, 
-		ICoreStockQuoteReadService, ICoreStockQuoteWriteService {
-    
-        CandleDAO daoCandle;  
-        StockQuoteDAO daoStock;
-        ITechnicalAnalysisService analService;
-        IPredictionService predService;
-    
-        @Autowired
-        public void setCandleDAO(CandleDAO candleDAO){
-            daoCandle = candleDAO;
-        }
-        @Autowired
-        public void setStockQuoteDAO(StockQuoteDAO stockDAO){
-            daoStock = stockDAO;
-        }
-        
-        public boolean candleDAOReady(){
-            return daoCandle!=null;
-        }
-        public boolean stockQuoteDAOReady(){
-            return daoStock!=null;
-        }
-        
+	CandleDAO daoCandle;
+	StockQuoteDAO daoStock;
+	ITechnicalAnalysisService analService;
+	IPredictionService predService;
+
+	@Autowired
+	public void setCandleDAO(CandleDAO candleDAO) {
+		daoCandle = candleDAO;
+	}
+
+	@Autowired
+	public void setStockQuoteDAO(StockQuoteDAO stockDAO) {
+		daoStock = stockDAO;
+	}
+
+	public boolean candleDAOReady() {
+		return daoCandle != null;
+	}
+
+	public boolean stockQuoteDAOReady() {
+		return daoStock != null;
+	}
+
 	@Override
-	public List<Candle> getCandlestickChart(ListedCompany listedCompany, Date dayFrom, Date dayTo) 
-        {
-            List<Candle> candles;
-            
-            if(daoCandle.allCandlesPresent(listedCompany, dayTo, dayTo))  {
-                candles = daoCandle.listCandlesFor(listedCompany, dayTo, dayTo);
-            }   else {
-                candles = analService.getCandles(daoStock.getQuotesFor(listedCompany,dayFrom,dayTo));
-                daoCandle.writeCandles(candles);
-            }
-            
-            CandlestickChart chart = analService.createCandlestickChart(listedCompany, candles);
-            return chart.getCandles();
-             
-            
-	 // Szyna sprawdza, czy ma już policzone świece dla wszystkich dni od X do Y.
-	 // Jeśli nie:
-	 //     szyna -> analizy: policz mi świece dla wszystkich dni od X do Y 
-	 // public List<Candle> getCandles(List<StockQuote> shareData);
-	 //     (nie przejmujemy się, że niektóre już mogły być policzone)
-	 // zapisz te świece w bazie
-	
-	 // szyna -> analizy: masz tu candles, znajdź mi dla nich formacje -> formations 
-	 // (tu już liczymy zawsze on-line - formacji NIGDY nie persystujemy)
-	 // zwróć do GUI candles oraz formations
-	 // public CandlestickChart createCandlestickChart(ListedCompany listedCompany, List<Candle> candles);
+	public CandlestickChart getCandlestickChart(ListedCompany listedCompany, Date dayFrom, Date dayTo) {
 		
+		List<Candle> candles;
+
+		if (daoCandle.allCandlesPresent(listedCompany, dayTo, dayTo)) {
+			candles = daoCandle.listCandlesFor(listedCompany, dayTo, dayTo);
+		} else {
+			candles = analService.getCandles(daoStock.getQuotesFor(
+					listedCompany, dayFrom, dayTo));
+			daoCandle.writeCandles(candles);
+		}
+
+		CandlestickChart chart = analService.createCandlestickChart(listedCompany, candles);
+		return chart;
+
+		// Szyna sprawdza, czy ma już policzone świece dla wszystkich dni od X
+		// do Y.
+		// Jeśli nie:
+		// szyna -> analizy: policz mi świece dla wszystkich dni od X do Y
+		// public List<Candle> getCandles(List<StockQuote> shareData);
+		// (nie przejmujemy się, że niektóre już mogły być policzone)
+		// zapisz te świece w bazie
+
+		// szyna -> analizy: masz tu candles, znajdź mi dla nich formacje ->
+		// formations
+		// (tu już liczymy zawsze on-line - formacji NIGDY nie persystujemy)
+		// zwróć do GUI candles oraz formations
+		// public CandlestickChart createCandlestickChart(ListedCompany
+		// listedCompany, List<Candle> candles);
+
 	}
 
 	@Override
 	public Prediction getPrediction(PredictionParams params) {
-		// TODO zaimplementuj jako: return predictionService.predict((ICoreStockQuoteReadService)this, params);
+		// TODO zaimplementuj jako: return
+		// predictionService.predict((ICoreStockQuoteReadService)this, params);
 		return predService.predict(this, params);
 	}
 
 	@Override
-	public void storeStockQuotes(List<StockQuote> shareData) {		
+	public void storeStockQuotes(List<StockQuote> shareData) {
 		daoStock.storeStockQuotes(shareData);
 	}
 
@@ -86,6 +92,5 @@ public class Core implements ICoreCandlestickChartService, ICorePredictionServic
 		// TODO: odczyt z bazy dla danej spolki i dnia
 		return daoStock.getQuotesFor(listedCompany, day, day);
 	}
-        
-       
+
 }
