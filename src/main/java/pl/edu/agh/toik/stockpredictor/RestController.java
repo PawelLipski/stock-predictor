@@ -32,8 +32,8 @@ public class RestController {
 		CandlestickChart chart = new CandlestickChart();
 		ListedCompany listedCompany = new ListedCompany("", companyShortName);
 		chart.setListedCompany(listedCompany);
-		chart.setStartDay(new Date(2015, 4, 10));
-		chart.setEndDay(new Date(2015, 4, 15));
+		chart.setStartDay(new Date(115, 4, 10));
+		chart.setEndDay(new Date(115, 4, 15));
 		chart.setCandles(new ArrayList<Candle>());
 		chart.setFormations(new ArrayList<Formation>());
 		return chart;

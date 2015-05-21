@@ -16,22 +16,10 @@ import org.codehaus.jackson.map.ser.CustomSerializerFactory;
 
 public class CustomJacksonObjectMapper extends ObjectMapper {
 
-	public CustomJacksonObjectMapper() {
-		super();
-		System.out.println("CustomJacksonObjectMapper()");
-		configure(Feature.WRITE_DATES_AS_TIMESTAMPS, false);
-		setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
-	}
-
 	@PostConstruct
 	public void init() throws Exception {
 		super.configure(Feature.WRITE_DATES_AS_TIMESTAMPS, false);
 
-		// this one doesn't work at all, it's necessary to create and register a
-		// factory
-		// getSerializationConfig().withDateFormat(new SimpleDateFormat(mask));
-
-		// I am using Jackson 1.9 asl
 		CustomSerializerFactory factory = new CustomSerializerFactory();
 		factory.addSpecificMapping(Date.class, new JsonSerializer<Date>() {
 
@@ -45,12 +33,10 @@ public class CustomJacksonObjectMapper extends ObjectMapper {
 					SerializerProvider provider) throws IOException,
 					JsonProcessingException {
 
-				jgen.writeString(new SimpleDateFormat("yyyy-MM-dd")
-						.format(value));
+				jgen.writeString(new SimpleDateFormat("yyyy-MM-dd").format(value));
 			}
 		});
 		
-		this.setSerializerFactory(factory);
-		System.out.println("init done");
+		this.setSerializerFactory(factory);		
 	}
 }
