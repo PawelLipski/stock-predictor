@@ -1,5 +1,6 @@
 package pl.edu.agh.toik.stockpredictor.core;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +16,7 @@ import pl.edu.agh.toik.stockpredictor.prediction.PredictionParams;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.chart.CandlestickChart;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.Candle;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.Formation;
+import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.FormationType;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.ListedCompany;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.serializer.StockQuote;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.service.ITechnicalAnalysisService;
@@ -58,13 +60,27 @@ public class Core implements ICoreCandlestickChartService,
 	}
 
 	@Override
-	public CandlestickChart getCandlestickChart(ListedCompany listedCompany, Date dayFrom, Date dayTo) {
+	public CandlestickChart getCandlestickChart(ListedCompany listedCompany, Date dayFrom, Date dayTo) {				
+		
+		Candle candle1 = new Candle(listedCompany, new BigDecimal("100"), new BigDecimal("50"), 
+				new BigDecimal("60"), new BigDecimal("90"), dayFrom); 		
+		Candle candle2 = new Candle(listedCompany, new BigDecimal("200"), new BigDecimal("100"), 
+				new BigDecimal("120"), new BigDecimal("180"), dayFrom);
+		
+		List<Candle> candles = new ArrayList<Candle>();
+		candles.add(candle1);
+		candles.add(candle2);
+				
+		Formation formation = new Formation(dayFrom, dayTo, FormationType.BEARISH_KICKER_PATTERN, candles);
+		
+		List<Formation> formations = new ArrayList<Formation>();		
+		formations.add(formation);
 		
 		CandlestickChart chart = new CandlestickChart();
 		chart.setListedCompany(listedCompany);
 		chart.setStartDay(new Date(115, 4, 10));
 		chart.setEndDay(new Date(115, 4, 15));
-		chart.setCandles(new ArrayList<Candle>());
+		chart.setCandles(candles);
 		chart.setFormations(new ArrayList<Formation>());
 		return chart;
 		
