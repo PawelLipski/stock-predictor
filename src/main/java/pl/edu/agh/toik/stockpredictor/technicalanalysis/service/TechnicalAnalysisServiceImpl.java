@@ -11,9 +11,12 @@ import pl.edu.agh.toik.stockpredictor.technicalanalysis.tools.FormationTools;
 import java.math.BigDecimal;
 import java.util.*;
 
+import org.springframework.stereotype.Component;
+
 /**
  * Created by Krzysztof Kicinger on 2015-05-14.
  */
+@Component
 public class TechnicalAnalysisServiceImpl implements ITechnicalAnalysisService {
 
     private static Comparator<StockQuote> SHARE_DATA_COMPARATOR = new Comparator<StockQuote>() {

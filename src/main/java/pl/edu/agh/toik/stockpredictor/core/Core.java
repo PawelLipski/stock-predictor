@@ -19,10 +19,10 @@ public class Core implements ICoreCandlestickChartService,
 		ICorePredictionService, ICoreStockQuoteReadService,
 		ICoreStockQuoteWriteService {
 
-	CandleDAO daoCandle;
-	StockQuoteDAO daoStock;
-	ITechnicalAnalysisService analService;
-	IPredictionService predService;
+	private CandleDAO daoCandle;
+	private StockQuoteDAO daoStock;
+	private ITechnicalAnalysisService analysisService;
+	private IPredictionService predService;
 
 	@Autowired
 	public void setCandleDAO(CandleDAO candleDAO) {
@@ -32,6 +32,16 @@ public class Core implements ICoreCandlestickChartService,
 	@Autowired
 	public void setStockQuoteDAO(StockQuoteDAO stockDAO) {
 		daoStock = stockDAO;
+	}
+	
+	@Autowired
+	public void setAnalysisService(ITechnicalAnalysisService analysisService) {
+		this.analysisService = analysisService;		
+	}
+
+	@Autowired
+	public void setPredService(IPredictionService predService) {
+		this.predService = predService;
 	}
 
 	public boolean candleDAOReady() {
@@ -50,12 +60,11 @@ public class Core implements ICoreCandlestickChartService,
 		if (daoCandle.allCandlesPresent(listedCompany, dayTo, dayTo)) {
 			candles = daoCandle.listCandlesFor(listedCompany, dayTo, dayTo);
 		} else {
-			candles = analService.getCandles(daoStock.getQuotesFor(
-					listedCompany, dayFrom, dayTo));
+			candles = analysisService.getCandles(daoStock.getQuotesFor(listedCompany, dayFrom, dayTo));
 			daoCandle.writeCandles(candles);
 		}
 
-		CandlestickChart chart = analService.createCandlestickChart(listedCompany, candles);
+		CandlestickChart chart = analysisService.createCandlestickChart(listedCompany, candles);
 		return chart;
 
 		// Szyna sprawdza, czy ma już policzone świece dla wszystkich dni od X
@@ -92,5 +101,6 @@ public class Core implements ICoreCandlestickChartService,
 		// TODO: odczyt z bazy dla danej spolki i dnia
 		return daoStock.getQuotesFor(listedCompany, day, day);
 	}
+
 
 }
