@@ -1,8 +1,11 @@
 package pl.edu.agh.toik.stockpredictor.core;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import pl.edu.agh.toik.stockpredictor.core.dao.CandleDAO;
 import pl.edu.agh.toik.stockpredictor.core.dao.StockQuoteDAO;
 import pl.edu.agh.toik.stockpredictor.prediction.IPredictionService;
@@ -11,10 +14,12 @@ import pl.edu.agh.toik.stockpredictor.prediction.Prediction;
 import pl.edu.agh.toik.stockpredictor.prediction.PredictionParams;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.chart.CandlestickChart;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.Candle;
+import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.Formation;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.ListedCompany;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.serializer.StockQuote;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.service.ITechnicalAnalysisService;
 
+@Component
 public class Core implements ICoreCandlestickChartService,
 		ICorePredictionService, ICoreStockQuoteReadService,
 		ICoreStockQuoteWriteService {
@@ -55,6 +60,17 @@ public class Core implements ICoreCandlestickChartService,
 	@Override
 	public CandlestickChart getCandlestickChart(ListedCompany listedCompany, Date dayFrom, Date dayTo) {
 		
+		CandlestickChart chart = new CandlestickChart();
+		chart.setListedCompany(listedCompany);
+		chart.setStartDay(new Date(115, 4, 10));
+		chart.setEndDay(new Date(115, 4, 15));
+		chart.setCandles(new ArrayList<Candle>());
+		chart.setFormations(new ArrayList<Formation>());
+		return chart;
+		
+		/*
+		TODO: odkomentowac jak DAO bedzie zaimplementowane
+		 
 		List<Candle> candles;
 
 		if (daoCandle.allCandlesPresent(listedCompany, dayTo, dayTo)) {
@@ -66,6 +82,7 @@ public class Core implements ICoreCandlestickChartService,
 
 		CandlestickChart chart = analysisService.createCandlestickChart(listedCompany, candles);
 		return chart;
+		*/
 
 		// Szyna sprawdza, czy ma już policzone świece dla wszystkich dni od X
 		// do Y.
