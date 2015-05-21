@@ -53,9 +53,19 @@
         <property name="candleDAO" ref="candleDAO" />
         <property name="stockQuoteDAO" ref="stockQuoteDAO" />
     </bean>
+
+<!-- 
+	<bean id="jacksonObjectMapper" class="pl.edu.agh.toik.stockpredictor.CustomJacksonObjectMapper" />
+
+	<bean id="jacksonSerializationConfig" class="org.codehaus.jackson.map.SerializationConfig"
+		factory-bean="jacksonObjectMapper" factory-method="getSerializationConfig" />
     
     <bean id="jacksonMessageConverter" 
-    	class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+    	class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+    	<property name="objectMapper">
+    		<ref bean="jacksonObjectMapper" />
+    	</property>
+    </bean>
 	
 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
 		<property name="messageConverters">
@@ -64,5 +74,5 @@
 			</list>
 		</property>
 	</bean>
-    
+ -->
 </beans>
