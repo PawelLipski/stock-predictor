@@ -7,5 +7,13 @@ import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.ListedCompany;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.serializer.StockQuote;
 
 public interface ICoreStockQuoteReadService {
-	List<StockQuote> getStockQuotes(ListedCompany listedCompany, Date day);
+        /**
+         * 
+         * @param listedCompany
+         * @param from pełna data razem z czasem
+         * @param to pełna data razem z czasem
+         * @return 
+         */
+	List<StockQuote> getStockQuotes(ListedCompany listedCompany, Date from, Date to);
+        List<StockQuote> getLast(ListedCompany listedCompany,int n);
 }

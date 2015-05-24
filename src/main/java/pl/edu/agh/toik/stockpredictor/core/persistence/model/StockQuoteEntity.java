@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -30,7 +32,8 @@ public class StockQuoteEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="FLD__ID")
     private int id;
-    @Column(name="FKF_COMPANY",nullable = false)
+ 
+    @ManyToOne
     private CompanyEntity company;
     @Column(name="FLD_DATE_TIME",nullable = false)
     private Date dateTime;
@@ -47,6 +50,7 @@ public class StockQuoteEntity {
             ce = lce.get(0);
         } else {
             ce = new CompanyEntity(stq.getListedCompany());
+            session.persist(ce);
         }
         
         return new StockQuoteEntity(ce,stq.getDateAndTime(),stq.getValue());

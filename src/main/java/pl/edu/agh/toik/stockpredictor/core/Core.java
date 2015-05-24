@@ -129,11 +129,16 @@ public class Core implements ICoreCandlestickChartService,
 		daoStock.storeStockQuotes(shareData);
 	}
 
-	@Override
-	public List<StockQuote> getStockQuotes(ListedCompany listedCompany, Date day) {
-		// TODO: odczyt z bazy dla danej spolki i dnia
-		return daoStock.getQuotesFor(listedCompany, day, day);
-	}
+        public List<StockQuote> getStockQuotes(ListedCompany listedCompany, Date from, Date to)
+        {
+            return daoStock.getQuotesFor(listedCompany, from, to);
+        }
+        public List<StockQuote> getLast(ListedCompany listedCompany,int n)
+        {
+            return null;
+           // return daoStock.getQuotesFor(listedCompany, day, day);
+        }
+        
 
 
 }

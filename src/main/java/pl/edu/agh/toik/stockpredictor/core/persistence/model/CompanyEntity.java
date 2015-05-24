@@ -20,7 +20,7 @@ import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.ListedCompany;
  * @author Dariusz Hudziak 2015-05-18
  */
 @Entity
-@Table(name = "TBl_COMPANY")
+@Table(name = "TBL_COMPANY")
 public class CompanyEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -32,8 +32,14 @@ public class StockQuoteDAOImpl implements StockQuoteDAO {
 
     @Override
     public List<StockQuote> getQuotesFor(ListedCompany lcomp, Date fromDay, Date toDay) {
+      
+      Session s = factory.getCurrentSession();
+      
+      if(!s.isOpen()) {
+          s = factory.openSession();
+      }
         
-      Transaction t =  factory.getCurrentSession().beginTransaction();
+      Transaction t =  s.beginTransaction();
         
        List<StockQuoteEntity> list = factory.getCurrentSession().
                createCriteria(StockQuoteEntity.class,"sq").
@@ -55,14 +61,20 @@ public class StockQuoteDAOImpl implements StockQuoteDAO {
     @Override
     public void storeStockQuotes(List<StockQuote> lsq) {
         
-        Session session = factory.getCurrentSession();
+        
         
         
         for(StockQuote sq  : lsq) {
+            Session session = factory.getCurrentSession();
+                if(!session.isOpen()){
+                    session = factory.openSession();
+                }
             Transaction t =  session.beginTransaction();
             session.persist(StockQuoteEntity.from(sq, session));
             t.commit();
         }
+        
+        
         
     }
     
