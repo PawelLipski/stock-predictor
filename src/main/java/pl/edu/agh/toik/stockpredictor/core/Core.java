@@ -13,6 +13,7 @@ import pl.edu.agh.toik.stockpredictor.prediction.IPredictionService;
 
 import pl.edu.agh.toik.stockpredictor.prediction.Prediction;
 import pl.edu.agh.toik.stockpredictor.prediction.PredictionParams;
+import pl.edu.agh.toik.stockpredictor.prediction.PredictionServiceImpl;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.chart.CandlestickChart;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.Candle;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.Formation;
@@ -26,20 +27,10 @@ public class Core implements ICoreCandlestickChartService,
 		ICorePredictionService, ICoreStockQuoteReadService,
 		ICoreStockQuoteWriteService {
 
-	private CandleDAO daoCandle;
-	private StockQuoteDAO daoStock;
+
+        private IStockQuoteService quoteService;
 	private ITechnicalAnalysisService analysisService;
 	private IPredictionService predService;
-
-	@Autowired
-	public void setCandleDAO(CandleDAO candleDAO) {
-		daoCandle = candleDAO;
-	}
-
-	@Autowired
-	public void setStockQuoteDAO(StockQuoteDAO stockDAO) {
-		daoStock = stockDAO;
-	}
 	
 	@Autowired
 	public void setAnalysisService(ITechnicalAnalysisService analysisService) {
@@ -51,13 +42,7 @@ public class Core implements ICoreCandlestickChartService,
 		this.predService = predService;
 	}
 
-	public boolean candleDAOReady() {
-		return daoCandle != null;
-	}
-
-	public boolean stockQuoteDAOReady() {
-		return daoStock != null;
-	}
+	
 
 	@Override
 	public CandlestickChart getCandlestickChart(ListedCompany listedCompany, Date dayFrom, Date dayTo) {				
@@ -126,17 +111,16 @@ public class Core implements ICoreCandlestickChartService,
 
 	@Override
 	public void storeStockQuotes(List<StockQuote> shareData) {
-		daoStock.storeStockQuotes(shareData);
+		quoteService.storeStockQuotes(shareData);
 	}
 
         public List<StockQuote> getStockQuotes(ListedCompany listedCompany, Date from, Date to)
         {
-            return daoStock.getQuotesFor(listedCompany, from, to);
+            return quoteService.getStockQuotes(listedCompany, from, to);
         }
         public List<StockQuote> getLast(ListedCompany listedCompany,int n)
         {
-            return null;
-           // return daoStock.getQuotesFor(listedCompany, day, day);
+            return quoteService.getStockQuotes(listedCompany, n);
         }
         
 

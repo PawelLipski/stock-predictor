@@ -8,6 +8,7 @@ package pl.edu.agh.toik.stockpredictor.core.dao.impl.hbm;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -31,6 +32,39 @@ public class StockQuoteDAOImpl implements StockQuoteDAO {
     }
 
     @Override
+    public List<StockQuoteEntity> listRecentQuotes(String companyName, int n) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<StockQuoteEntity> listStockQuotes(String companyName, Date from, Date to) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+    
+    @Override
+    public void store(List<StockQuoteEntity> list) {
+        Session s = factory.getCurrentSession();
+        
+        for(StockQuoteEntity e : list) {
+            s.persist(e.getCompany());
+            s.persist(e);
+        }
+    }
+    
+    @Override
+    public void dropOlderThan(Date date) {
+        Session s = factory.getCurrentSession();
+        Query q = s.createQuery("delete from StockQuoteEntity where dateTime < :date");
+        q.setParameter("date", date);
+        q.executeUpdate();
+    }
+    
+    
+    
+
+ 
     public List<StockQuote> getQuotesFor(ListedCompany lcomp, Date fromDay, Date toDay) {
       
       Session s = factory.getCurrentSession();
@@ -58,7 +92,7 @@ public class StockQuoteDAOImpl implements StockQuoteDAO {
        return res;
     }
 
-    @Override
+  
     public void storeStockQuotes(List<StockQuote> lsq) {
         
         

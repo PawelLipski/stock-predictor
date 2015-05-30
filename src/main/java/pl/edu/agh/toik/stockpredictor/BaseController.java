@@ -61,8 +61,7 @@ public class BaseController {
    public String getStock() {
        
        Core c = new Core();
-       if(!c.candleDAOReady())  return "Missing candle DAO";
-       if(!c.stockQuoteDAOReady()) return "Missing stock quote DAO";
+       //c.getLast(null, n)
        return "Ready to use";
        
    }

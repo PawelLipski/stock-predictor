@@ -7,6 +7,8 @@ package pl.edu.agh.toik.stockpredictor.core.dao;
 
 import java.util.Date;
 import java.util.List;
+import pl.edu.agh.toik.stockpredictor.core.persistence.model.CompanyEntity;
+import pl.edu.agh.toik.stockpredictor.core.persistence.model.StockQuoteEntity;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.ListedCompany;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.serializer.StockQuote;
 
@@ -15,7 +17,10 @@ import pl.edu.agh.toik.stockpredictor.technicalanalysis.serializer.StockQuote;
  * @author uriel
  */
 public interface StockQuoteDAO {
-    List<StockQuote> getQuotesFor(ListedCompany lcomp,Date fromDay,Date toDay);
     
-    void storeStockQuotes(List<StockQuote> lsq);
+   List<StockQuoteEntity> listRecentQuotes(String companyName,int n);
+   List<StockQuoteEntity> listStockQuotes(String companyName,Date from,Date to);
+   void store(List<StockQuoteEntity> list);
+   void dropOlderThan(Date date);
+   
 }
