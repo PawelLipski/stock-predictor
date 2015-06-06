@@ -78,7 +78,8 @@ public class CandleTools {
     private static boolean isLongCorps(BigDecimal openingPrice, BigDecimal closingPrice, BigDecimal maxPrice, BigDecimal minPrice) {
         BigDecimal corpsHeight = openingPrice.subtract(closingPrice).abs();
         BigDecimal candleHeight = maxPrice.subtract(minPrice).abs();
-        return  isGreaterThan(corpsHeight.divide(candleHeight), LONG_CORPS_RATIO) &&
+        BigDecimal divided = new BigDecimal(corpsHeight.doubleValue()/candleHeight.doubleValue());
+        return  isGreaterThan(divided, LONG_CORPS_RATIO) &&
                 !isEqual(openingPrice, minPrice) && !isEqual(openingPrice, maxPrice) &&
                 !isEqual(closingPrice, minPrice) && !isEqual(closingPrice, maxPrice);
     }
@@ -87,7 +88,8 @@ public class CandleTools {
         BigDecimal corpsHeight = openingPrice.subtract(closingPrice).abs();
         BigDecimal candleHeight = maxPrice.subtract(minPrice).abs();
         BigDecimal middlePoint = getMiddlePointPrice(maxPrice, minPrice);
-        return isLowerThan(corpsHeight.divide(candleHeight), REEL_RATIO) &&
+        BigDecimal divied = new BigDecimal(corpsHeight.doubleValue()/candleHeight.doubleValue());
+        return isLowerThan(divied, REEL_RATIO) &&
                 ((isGreaterThan(openingPrice, middlePoint) && isLowerThan(closingPrice, middlePoint)) ||
                  (isGreaterThan(closingPrice, middlePoint) && isLowerThan(openingPrice, middlePoint)));
     }
