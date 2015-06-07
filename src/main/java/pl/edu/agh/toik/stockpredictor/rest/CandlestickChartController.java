@@ -34,7 +34,8 @@ public class CandlestickChartController {
 			HttpServletResponse response,
 			@RequestParam(value="companyShortName") String companyShortName,
 			@RequestParam(value="dayFrom") Date dayFrom,
-			@RequestParam(value="dayTo") Date dayTo) {
+			@RequestParam(value="dayTo") Date dayTo) 
+                        throws ChartUnavailable {
 
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
