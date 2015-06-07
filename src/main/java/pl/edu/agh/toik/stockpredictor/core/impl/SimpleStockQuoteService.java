@@ -5,6 +5,7 @@
  */
 package pl.edu.agh.toik.stockpredictor.core.impl;
 
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +40,18 @@ public class SimpleStockQuoteService implements IStockQuoteService {
         this.factory = dao;
     }
 
+    @Override
+    @Transactional
+    public List<ListedCompany> getCompanies() {
+       List<CompanyEntity> entities = factory.newCompanyDAO().getCompanies();
+       List<ListedCompany> result = new ArrayList<>();
+       
+       for(CompanyEntity ce : entities ) {
+           result.add(ce.toListedCompany());
+       }
+       
+       return result;
+    }
     
     @Override
     @Transactional

@@ -5,6 +5,7 @@
  */
 package pl.edu.agh.toik.stockpredictor.core.dao;
 
+import java.util.List;
 import pl.edu.agh.toik.stockpredictor.core.persistence.model.CompanyEntity;
 
 /**
@@ -12,6 +13,7 @@ import pl.edu.agh.toik.stockpredictor.core.persistence.model.CompanyEntity;
  * @author Dariusz Hudziak
  */
 public interface CompanyDAO {
+    List<CompanyEntity> getCompanies();
     CompanyEntity findCompany(String shortName);
     void store(CompanyEntity ce);
 }

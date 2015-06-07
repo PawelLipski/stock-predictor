@@ -18,6 +18,7 @@ import pl.edu.agh.toik.stockpredictor.technicalanalysis.serializer.StockQuote;
 @Transactional
 public interface IStockQuoteService {
     
+   List<ListedCompany> getCompanies();
    List<StockQuote> getStockQuotes(ListedCompany listedCompany, Date from, Date to);
    List<StockQuote> getStockQuotes(ListedCompany listedCompany, int n); 
    void storeStockQuotes(List<StockQuote> list);

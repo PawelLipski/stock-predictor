@@ -7,6 +7,7 @@ package pl.edu.agh.toik.stockpredictor.core.persistence.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,7 +32,7 @@ public class CandleEntity {
     @Column(name="FLD__ID")
     private int id;
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name="FKF_COMPANY",nullable = false)
     private CompanyEntity company;
     

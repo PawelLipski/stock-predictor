@@ -7,17 +7,15 @@ package pl.edu.agh.toik.stockpredictor.core.persistence.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.ListedCompany;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.serializer.StockQuote;
@@ -34,7 +32,8 @@ public class StockQuoteEntity {
     @Column(name="FLD__ID")
     private int id;
  
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "FKF_COMPANY")
     private CompanyEntity company;
     @Column(name="FLD_DATE_TIME",nullable = false)
     private Date dateTime;

@@ -22,7 +22,14 @@ public class CompanyDAOImpl implements CompanyDAO  {
     public CompanyDAOImpl(SessionFactory factory) {
         this.factory = factory;
     }
-   
+
+    @Override
+    public List<CompanyEntity> getCompanies() {
+       return factory.getCurrentSession()
+               .createCriteria(CompanyEntity.class)
+               .list();
+    }
+    
     @Override
     public CompanyEntity findCompany(String shortName) {
         List<CompanyEntity> cel =

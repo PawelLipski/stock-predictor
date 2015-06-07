@@ -153,6 +153,13 @@ public class Core implements ICoreCandlestickChartService,
         {
             return quoteService.getStockQuotes(listedCompany, n);
         }
+
+    @Override
+    public List<ListedCompany> getCompanies() {
+        return quoteService.getCompanies();
+    }
+        
+        
         
 
 

@@ -86,6 +86,12 @@ public class BaseController {
        return "Ready to use";
        
    }
+   
+   @RequestMapping(value="/company",method = RequestMethod.GET)
+   @ResponseBody
+   public List<ListedCompany> listCompanies() {
+       return core.getCompanies();
+   }
 
    
    @InitBinder

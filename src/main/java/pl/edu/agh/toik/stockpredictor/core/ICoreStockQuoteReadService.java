@@ -16,4 +16,5 @@ public interface ICoreStockQuoteReadService {
          */
 	List<StockQuote> getStockQuotes(ListedCompany listedCompany, Date from, Date to);
         List<StockQuote> getLast(ListedCompany listedCompany,int n);
+        List<ListedCompany> getCompanies();
 }
