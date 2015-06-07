@@ -1,5 +1,6 @@
 package pl.edu.agh.toik.stockpredictor.prediction;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.serializer.StockQuote;
@@ -9,7 +10,7 @@ public class Prediction {
 	private List<StockQuote /*???*/ > stocks;
 	private PredicitionMethod predictionMethod;
     private boolean /*???*/ upDown;
-    private double prediction; 
+    private BigDecimal prediction;
     private double probability; // optional: negative when the method doesn't provide probability for the result
 	
     public List<StockQuote> getStocks() {
@@ -33,10 +34,10 @@ public class Prediction {
 		this.upDown = upDown;
 	}
 	
-	public double getPrediction() {
+	public BigDecimal getPrediction() {
 		return prediction;
 	}
-	public void setPrediction(double prediction) {
+	public void setPrediction(BigDecimal prediction) {
 		this.prediction = prediction;
 	}
 	

@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 
 import pl.edu.agh.toik.stockpredictor.core.dao.CandleDAO;
 import pl.edu.agh.toik.stockpredictor.core.dao.StockQuoteDAO;
-import pl.edu.agh.toik.stockpredictor.prediction.IPredictionService;
+import pl.edu.agh.toik.stockpredictor.prediction.service.IPredictionService;
 
 import pl.edu.agh.toik.stockpredictor.prediction.Prediction;
 import pl.edu.agh.toik.stockpredictor.prediction.PredictionParams;
-import pl.edu.agh.toik.stockpredictor.prediction.PredictionServiceImpl;
+import pl.edu.agh.toik.stockpredictor.prediction.service.impl.PredictionServiceImpl;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.chart.CandlestickChart;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.Candle;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.Formation;
