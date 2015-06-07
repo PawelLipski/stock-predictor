@@ -41,20 +41,8 @@ public class StockQuoteEntity {
     @Column(name="FLD_VALUE",nullable = false)
     private BigDecimal value;
 
-    public static StockQuoteEntity from(StockQuote stq,Session session) {
-       
-        List<CompanyEntity> lce = session.createCriteria(CompanyEntity.class).
-                                  add(Restrictions.eq("shortName", stq.getListedCompany().getShortName())).
-                                  list();
-        CompanyEntity ce = null;
-        if(lce.size() > 0) {
-            ce = lce.get(0);
-        } else {
-            ce = new CompanyEntity(stq.getListedCompany());
-            session.persist(ce);
-        }
-        
-        return new StockQuoteEntity(ce,stq.getDateAndTime(),stq.getValue());
+
+    public StockQuoteEntity() {
     }
 
     public StockQuoteEntity(CompanyEntity company, Date dateTime, BigDecimal value) {

@@ -2,10 +2,16 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd 
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
     <context:component-scan base-package="pl.edu.agh.toik.stockpredictor"/>
 
@@ -34,25 +40,18 @@
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-                <prop key="hibernate.current_session_context_class">thread</prop>
+                <!--<prop key="hibernate.current_session_context_class">thread</prop>-->
                 <prop key="hibernate.show_sql">false</prop>
-                <prop key="hibernate.hbm2ddl.auto">create</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
             </props>
         </property>
     </bean>
     
-    <bean id="candleDAO" class="pl.edu.agh.toik.stockpredictor.core.dao.impl.hbm.CandleDAOImpl">
-        <property name="sessionFactory" ref="sessionFactory"></property>
+    <bean id="hbmDAOFactory" class="pl.edu.agh.toik.stockpredictor.core.dao.impl.hbm.HibernateDAOFactory" >
+        <property name="factory" ref="sessionFactory"/>
     </bean>
+    <bean id="core" class="pl.edu.agh.toik.stockpredictor.core.Core" />
     
-    <bean id="stockQuoteDAO" class="pl.edu.agh.toik.stockpredictor.core.dao.impl.hbm.StockQuoteDAOImpl">
-        <property name="sessionFactory" ref="sessionFactory"></property>
-    </bean>
-    
-    <bean id="core" class="pl.edu.agh.toik.stockpredictor.core.Core" >
-        <property name="candleDAO" ref="candleDAO" />
-        <property name="stockQuoteDAO" ref="stockQuoteDAO" />
-    </bean>
  
 	<bean id="jacksonObjectMapper" class="pl.edu.agh.toik.stockpredictor.rest.CustomJacksonObjectMapper" />
 
@@ -73,5 +72,11 @@
             </list>
         </property>
     </bean>
+ 
+   
+    <bean id="txMgr" class="org.springframework.orm.hibernate3.HibernateTransactionManager" >
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    <tx:annotation-driven transaction-manager="txMgr" proxy-target-class="true" />
  
 </beans>

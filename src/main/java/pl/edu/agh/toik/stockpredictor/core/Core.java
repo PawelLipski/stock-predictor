@@ -27,16 +27,25 @@ public class Core implements ICoreCandlestickChartService,
 		ICorePredictionService, ICoreStockQuoteReadService,
 		ICoreStockQuoteWriteService {
 
-
         private IStockQuoteService quoteService;
+        @Autowired
+        public void setQuoteService(IStockQuoteService quoteService) {
+            this.quoteService = quoteService;
+        }
+        
+        private ICandleService candleService;
+        @Autowired
+        public void setCandleService(ICandleService candleService) {
+            this.candleService = candleService;
+        }
+        
 	private ITechnicalAnalysisService analysisService;
-	private IPredictionService predService;
-	
-	@Autowired
+        @Autowired
 	public void setAnalysisService(ITechnicalAnalysisService analysisService) {
 		this.analysisService = analysisService;		
 	}
-
+        
+	private IPredictionService predService;
 	@Autowired
 	public void setPredService(IPredictionService predService) {
 		this.predService = predService;
@@ -45,45 +54,67 @@ public class Core implements ICoreCandlestickChartService,
 	
 
 	@Override
-	public CandlestickChart getCandlestickChart(ListedCompany listedCompany, Date dayFrom, Date dayTo) {				
+	public CandlestickChart getCandlestickChart(ListedCompany listedCompany, 
+                                                    Date dayFrom, 
+                                                    Date dayTo)
+                                                    throws ChartUnavailable {				
 		
-		Candle candle1 = new Candle(listedCompany, new BigDecimal("100"), new BigDecimal("50"), 
-				new BigDecimal("60"), new BigDecimal("90"), dayFrom); 		
-		Candle candle2 = new Candle(listedCompany, new BigDecimal("200"), new BigDecimal("100"), 
-				new BigDecimal("120"), new BigDecimal("180"), dayFrom);
+//		Candle candle1 = new Candle(listedCompany, new BigDecimal("100"), new BigDecimal("50"), 
+//				new BigDecimal("60"), new BigDecimal("90"), dayFrom); 		
+//		Candle candle2 = new Candle(listedCompany, new BigDecimal("200"), new BigDecimal("100"), 
+//				new BigDecimal("120"), new BigDecimal("180"), dayFrom);
+//		
+//		List<Candle> candles = new ArrayList<Candle>();
+//		candles.add(candle1);
+//		candles.add(candle2);
+//				
+//		Formation formation = new Formation(dayFrom, dayTo, FormationType.BEARISH_KICKER_PATTERN, candles);
+//		
+//		List<Formation> formations = new ArrayList<Formation>();		
+//		formations.add(formation);
+//		
+//		CandlestickChart chart = new CandlestickChart();
+//		chart.setListedCompany(listedCompany);
+//		chart.setStartDay(new Date(115, 4, 10));
+//		chart.setEndDay(new Date(115, 4, 15));
+//		chart.setCandles(candles);
+//		chart.setFormations(new ArrayList<Formation>());
+//		return chart;
 		
-		List<Candle> candles = new ArrayList<Candle>();
-		candles.add(candle1);
-		candles.add(candle2);
-				
-		Formation formation = new Formation(dayFrom, dayTo, FormationType.BEARISH_KICKER_PATTERN, candles);
 		
-		List<Formation> formations = new ArrayList<Formation>();		
-		formations.add(formation);
-		
-		CandlestickChart chart = new CandlestickChart();
-		chart.setListedCompany(listedCompany);
-		chart.setStartDay(new Date(115, 4, 10));
-		chart.setEndDay(new Date(115, 4, 15));
-		chart.setCandles(candles);
-		chart.setFormations(new ArrayList<Formation>());
-		return chart;
-		
-		/*
-		TODO: odkomentowac jak DAO bedzie zaimplementowane
-		 
-		List<Candle> candles;
-
-		if (daoCandle.allCandlesPresent(listedCompany, dayTo, dayTo)) {
-			candles = daoCandle.listCandlesFor(listedCompany, dayTo, dayTo);
-		} else {
-			candles = analysisService.getCandles(daoStock.getQuotesFor(listedCompany, dayFrom, dayTo));
-			daoCandle.writeCandles(candles);
-		}
-
+		List<Candle> candles = candleService.getCandlesFor(listedCompany, dayFrom, dayTo);
+                
+                
+                if(candles.size() > 0) {
+                    Candle c = candles.get(0);
+                    dayFrom = c.getDay();
+                } 
+                
+                if(dayFrom.compareTo(dayTo)==-1)
+                {
+                    List<Candle> missingCandles = null;
+                    
+                    missingCandles = 
+                            analysisService.getCandles(
+                                    quoteService.getStockQuotes(listedCompany, 
+                                                                dayFrom, 
+                                                                dayTo));
+                    candleService.store(candles);
+                    
+                    if( missingCandles.size() > 0 ){
+                        candleService.store(candles);
+                        candles.addAll(missingCandles);
+                    }
+                    
+                }
+            
+                if( candles.size() < 1 ) {
+                    throw new ChartUnavailable("Not enough data available");
+                }
+                
 		CandlestickChart chart = analysisService.createCandlestickChart(listedCompany, candles);
 		return chart;
-		*/
+		
 
 		// Szyna sprawdza, czy ma już policzone świece dla wszystkich dni od X
 		// do Y.

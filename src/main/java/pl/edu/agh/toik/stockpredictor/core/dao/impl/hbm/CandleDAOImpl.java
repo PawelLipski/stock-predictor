@@ -8,9 +8,12 @@ package pl.edu.agh.toik.stockpredictor.core.dao.impl.hbm;
 import java.util.Date;
 import java.util.List;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
 import pl.edu.agh.toik.stockpredictor.core.dao.CandleDAO;
+import pl.edu.agh.toik.stockpredictor.core.persistence.model.CandleEntity;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.Candle;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.ListedCompany;
 
@@ -18,29 +21,30 @@ import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.ListedCompany;
  *
  * @author uriel
  */
+
 public class CandleDAOImpl implements CandleDAO {
 
     private SessionFactory factory;
-    
-    @Autowired
-    @Qualifier("sessionFactory")
-    public void setSessionFactory(SessionFactory sf){
-        factory = sf;
-    }
-    
-    @Override
-    public boolean allCandlesPresent(ListedCompany company, Date fromDay, Date toDay) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+    public CandleDAOImpl(SessionFactory factory) {
+        this.factory = factory;
     }
 
     @Override
-    public List<Candle> listCandlesFor(ListedCompany company, Date fromDay, Date toDay) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void writeCandles(List<Candle> candles) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<CandleEntity> listCandlesFor(String company, Date fromDay, Date toDay) {
+        return factory.getCurrentSession()
+                      .createCriteria(CandleEntity.class,"ce")
+                      .createAlias("ce.company", "c")
+                      .add(Restrictions.and(Restrictions.eq("c.shortName", company),
+                                            Restrictions.between("ce.day", fromDay, toDay)))
+                      .list();
     }
     
+    @Override
+    public void writeCandles(CandleEntity ce) {
+        factory.getCurrentSession().persist(ce);
+    }
+    
+    
+   
 }

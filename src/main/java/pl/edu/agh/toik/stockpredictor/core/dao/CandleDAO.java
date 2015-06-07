@@ -7,15 +7,13 @@ package pl.edu.agh.toik.stockpredictor.core.dao;
 
 import java.util.Date;
 import java.util.List;
-import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.Candle;
-import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.ListedCompany;
+import pl.edu.agh.toik.stockpredictor.core.persistence.model.CandleEntity;
 
 /**
  *
  * @author uriel
  */
 public interface CandleDAO {
-    boolean allCandlesPresent(ListedCompany company, Date fromDay, Date toDay);
-    List<Candle> listCandlesFor(ListedCompany company, Date fromDay, Date toDay);
-    void writeCandles(List<Candle> candles);
+    List<CandleEntity> listCandlesFor(String company, Date fromDay, Date toDay);
+    void writeCandles(CandleEntity ce);
 }

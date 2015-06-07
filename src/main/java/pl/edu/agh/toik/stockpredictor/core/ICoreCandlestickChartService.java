@@ -8,5 +8,7 @@ import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.Candle;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.ListedCompany;
 
 public interface ICoreCandlestickChartService {
-	CandlestickChart getCandlestickChart(ListedCompany listedCompany, Date dayFrom, Date dayTo);
+	CandlestickChart getCandlestickChart(ListedCompany listedCompany,
+                                             Date dayFrom, 
+                                             Date dayTo) throws ChartUnavailable;
 }

@@ -10,17 +10,11 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.Candle;
-import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.CandleColor;
-import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.CandleType;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.ListedCompany;
 
 
@@ -53,25 +47,6 @@ public class CandleEntity {
     
     @Column(name="FLD_DAY")
     private Date day;
-    
-    public static CandleEntity from(Candle candle,Session session) {
-        
-        List<CompanyEntity> lce = session.createCriteria(CompanyEntity.class).
-                                  add(Restrictions.eq("shortName", candle.getListedCompany().getShortName())).
-                                  list();
-        CompanyEntity ce = null;
-        if(lce.size() > 0) {
-            ce = lce.get(0);
-        } else {
-            ce = new CompanyEntity(candle.getListedCompany());
-        }
-        
-        return new CandleEntity(ce,candle.getMaxPrice(),
-                                   candle.getMinPrice(),
-                                   candle.getOpeningPrice(),
-                                   candle.getClosingPrice(),
-                                   candle.getDay());
-    }
     
     public CandleEntity() {
     }

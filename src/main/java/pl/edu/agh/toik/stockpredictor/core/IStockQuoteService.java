@@ -7,6 +7,7 @@ package pl.edu.agh.toik.stockpredictor.core;
 
 import java.util.Date;
 import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.ListedCompany;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.serializer.StockQuote;
 
@@ -14,6 +15,7 @@ import pl.edu.agh.toik.stockpredictor.technicalanalysis.serializer.StockQuote;
  *
  * @author Dariusz Hudziak
  */
+@Transactional
 public interface IStockQuoteService {
     
    List<StockQuote> getStockQuotes(ListedCompany listedCompany, Date from, Date to);

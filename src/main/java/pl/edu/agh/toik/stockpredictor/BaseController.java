@@ -2,20 +2,27 @@ package pl.edu.agh.toik.stockpredictor;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import pl.edu.agh.toik.stockpredictor.core.Core;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.ListedCompany;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.serializer.StockQuote;
-import pl.edu.agh.toik.stockpredictor.technicalanalysis.tools.DateTools;
 
 /**
  * Created by Krzysztof Kicinger on 2015-04-27.
@@ -56,14 +63,35 @@ public class BaseController {
         
         return "static/index.html";
     }
+   
+    @RequestMapping(value = "stock",method = RequestMethod.GET)
+    @ResponseBody
+    public List<StockQuote> getStock(
+                                    @RequestParam(value="company") String comp ,    
+                                    @RequestParam(value = "n",required = false,defaultValue = "1") int n){
+        return core.getLast(new ListedCompany(comp,comp), n);
+    }
     
-   @RequestMapping("/stock")
-   public String getStock() {
+   @RequestMapping(value="/stock",method = RequestMethod.POST)
+   @ResponseBody
+   public String postStock(@RequestParam(value = "company") String company,
+                           @RequestParam(value = "date", required = false) Timestamp date,
+                           @RequestParam(value = "value") double v) {
        
-       Core c = new Core();
-       //c.getLast(null, n)
+       
+       
+       ListedCompany lc = new ListedCompany(company,company);
+       core.storeStockQuotes(Collections.singletonList(new StockQuote(lc,new Date(System.currentTimeMillis()),BigDecimal.valueOf(15))));
+       
        return "Ready to use";
        
    }
 
+   
+   @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        dateFormat.setLenient(false);
+        binder.registerCustomEditor(Timestamp.class, new CustomDateEditor(dateFormat, false));
+    }
 }

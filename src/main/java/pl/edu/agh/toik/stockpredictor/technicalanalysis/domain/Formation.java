@@ -3,7 +3,7 @@ package pl.edu.agh.toik.stockpredictor.technicalanalysis.domain;
 import java.util.Date;
 import java.util.List;
 
-import org.hamcrest.core.IsInstanceOf;
+//import org.hamcrest.core.IsInstanceOf;
 
 /**
  * Class represents formation which was adjusted to candles in particular

@@ -9,8 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import pl.edu.agh.toik.stockpredictor.core.ChartUnavailable;
 
 import pl.edu.agh.toik.stockpredictor.core.ICoreCandlestickChartService;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.chart.CandlestickChart;
@@ -29,12 +31,13 @@ public class CandlestickChartController {
 	public CandlestickChart getCandlestickCharts(
 			@RequestParam(value="companyShortName") String companyShortName,
 			@RequestParam(value="dayFrom") Date dayFrom,
-			@RequestParam(value="dayTo") Date dayTo) {
+			@RequestParam(value="dayTo") Date dayTo)
+                        throws ChartUnavailable {
 		
 		ListedCompany company = new ListedCompany("", companyShortName);
 		return chartService.getCandlestickChart(company, dayFrom, dayTo);				
 	}
-	
+        
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
