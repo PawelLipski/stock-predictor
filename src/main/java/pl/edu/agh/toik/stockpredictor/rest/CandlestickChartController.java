@@ -3,6 +3,8 @@ package pl.edu.agh.toik.stockpredictor.rest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -29,11 +31,15 @@ public class CandlestickChartController {
 	@RequestMapping(value = "/getCandlestickCharts")
 	@ResponseBody
 	public CandlestickChart getCandlestickCharts(
+			HttpServletResponse response,
 			@RequestParam(value="companyShortName") String companyShortName,
 			@RequestParam(value="dayFrom") Date dayFrom,
-			@RequestParam(value="dayTo") Date dayTo)
-                        throws ChartUnavailable {
-		
+			@RequestParam(value="dayTo") Date dayTo) {
+
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+		response.setHeader("Access-Control-Max-Age", "3600");
+		response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
 		ListedCompany company = new ListedCompany("", companyShortName);
 		return chartService.getCandlestickChart(company, dayFrom, dayTo);				
 	}
