@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.toik.stockpredictor.core.ICandleService;
 import pl.edu.agh.toik.stockpredictor.core.dao.CandleDAO;
 import pl.edu.agh.toik.stockpredictor.core.dao.CompanyDAO;
@@ -33,6 +34,7 @@ public class SimpleCandleService implements ICandleService {
     }
     
     @Override
+    @Transactional
     public List<Candle> getCandlesFor(ListedCompany le, Date from, Date to) {
         CandleDAO dao = factory.newCandleDAO();
         
@@ -47,6 +49,7 @@ public class SimpleCandleService implements ICandleService {
     }
 
     @Override
+    @Transactional
     public void store(List<Candle> lc) {
        
         CandleDAO candleDAO = factory.newCandleDAO();

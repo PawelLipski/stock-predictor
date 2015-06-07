@@ -66,7 +66,12 @@ public class TechnicalAnalysisServiceImpl implements ITechnicalAnalysisService {
             if(dayToShareDataMap.containsKey(dayAccurateDate)) {
                 dayToShareDataMap.get(dayAccurateDate).add(sd);
             } else {
-                dayToShareDataMap.put(dayAccurateDate, Arrays.asList(sd));
+                // Arrays.asList creates immutable list
+                //dayToShareDataMap.put(dayAccurateDate, Arrays.asList(sd));
+                // To achive inline notation all we need to do is wrap it with full
+                // list implementataion - this involves copying. Might be more efective
+                // to write in 2 lines
+                dayToShareDataMap.put(dayAccurateDate, new LinkedList(Arrays.asList(sd)));
             }
         }
         return dayToShareDataMap;

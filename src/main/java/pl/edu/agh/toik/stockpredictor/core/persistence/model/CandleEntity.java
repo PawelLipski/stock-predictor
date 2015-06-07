@@ -7,12 +7,13 @@ package pl.edu.agh.toik.stockpredictor.core.persistence.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.Candle;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.ListedCompany;
@@ -30,7 +31,8 @@ public class CandleEntity {
     @Column(name="FLD__ID")
     private int id;
     
-    @Column(name="FKF_COMPANY",nullable = false)
+    @ManyToOne
+    @JoinColumn(name="FKF_COMPANY",nullable = false)
     private CompanyEntity company;
     
     @Column(name="FLD_MAX_PRICE",nullable = true)

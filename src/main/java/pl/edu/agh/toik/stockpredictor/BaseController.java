@@ -75,13 +75,13 @@ public class BaseController {
    @RequestMapping(value="/stock",method = RequestMethod.POST)
    @ResponseBody
    public String postStock(@RequestParam(value = "company") String company,
-                           @RequestParam(value = "date", required = false) Timestamp date,
+                           @RequestParam(value = "date", required = false) Date date,
                            @RequestParam(value = "value") double v) {
        
        
        
        ListedCompany lc = new ListedCompany(company,company);
-       core.storeStockQuotes(Collections.singletonList(new StockQuote(lc,new Date(System.currentTimeMillis()),BigDecimal.valueOf(15))));
+       core.storeStockQuotes(Collections.singletonList(new StockQuote(lc,date,BigDecimal.valueOf(v))));
        
        return "Ready to use";
        
@@ -92,6 +92,6 @@ public class BaseController {
     public void initBinder(WebDataBinder binder) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         dateFormat.setLenient(false);
-        binder.registerCustomEditor(Timestamp.class, new CustomDateEditor(dateFormat, false));
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
     }
 }
