@@ -55,7 +55,7 @@ public class Core implements ICoreCandlestickChartService,
         
         @PostConstruct
         public void start() {
-            collector = new StockQuoteCollector(60,this);
+            collector = new StockQuoteCollector(5,this);
             collector.addStockQuote("POM");
             collector.addStockQuote("M");
             collectorThread = new Thread(collector);
