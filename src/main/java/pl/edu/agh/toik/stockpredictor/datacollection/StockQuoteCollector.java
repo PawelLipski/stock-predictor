@@ -3,8 +3,10 @@ package pl.edu.agh.toik.stockpredictor.datacollection;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 
@@ -26,6 +28,8 @@ public class StockQuoteCollector implements Runnable{
 	private CopyOnWriteArrayList<String> selectedServicesNames = new CopyOnWriteArrayList<String>();
 	private StockQuoteConstantHolder constantHolder = new StockQuoteConstantHolder();
 	private ICoreStockQuoteWriteService writeService;
+	//TODO delete it, its just for tests
+	private Map<String, BigDecimal> stockQuotesBase = new HashMap<String, BigDecimal>();
 	
 	public StockQuoteCollector(ICoreStockQuoteWriteService writeService){
 		this.writeService = writeService;
@@ -102,16 +106,23 @@ public class StockQuoteCollector implements Runnable{
 				// instance of it every time we refresh the stockquotes
 				ListedCompany listedCompany = new ListedCompany(nameMatcher.group(1), shortNameMatcher.group(1));
 				
-				StockQuote stockQuote = new StockQuote(listedCompany, date, new BigDecimal(valueMatcher.group(1)));
+				//TODO delete it - just for tests
+				if (stockQuotesBase.containsKey(serviceName)){
+					stockQuotesBase.put(serviceName, stockQuotesBase.get(serviceName).multiply(new BigDecimal(Math.random() * (1.1-0.9) + 0.9))); 
+				}else{
+					stockQuotesBase.put(serviceName, new BigDecimal(valueMatcher.group(1)));
+				}
 				
-                                System.out.println( "save: "+stockQuote.getDateAndTime());
-                                
+				StockQuote stockQuote = new StockQuote(listedCompany, new Date()/*date*/, stockQuotesBase.get(serviceName)/*new BigDecimal(valueMatcher.group(1))*/ );
+				
+				System.out.println(stockQuote.getValue());
+				System.out.println(stockQuote.getDateAndTime());
+				
 				dataToSend.add(stockQuote);
 			}else{
 				throw new RuntimeException("StockQuoteCollector GET (" + serviceName + ") method on webservice did not succeed.");
 			}
 		}
-		System.out.println(dataToSend.size());
 		writeService.storeStockQuotes(dataToSend);
 	}
 	
@@ -123,7 +134,7 @@ public class StockQuoteCollector implements Runnable{
 				Thread.sleep(updateRate);
 			} catch (Exception e) {
 				//e.printStackTrace();
-                                return;
+				return;
 			}
 		}
 	}
@@ -131,7 +142,7 @@ public class StockQuoteCollector implements Runnable{
 	//TODO this might be removed because it doesn't wait for spring beans to laod 
 	// (then InitializingBean interface should be imlpemented
 	@PostConstruct
-	public void init(){
+	public static void init(){
 		//TODO add implementation of ICorStockQuoteWriteService
 		//TODO let user select which stock quotes he wants to follow
 		StockQuoteCollector collector = new StockQuoteCollector(new ICoreStockQuoteWriteService(){
@@ -144,6 +155,10 @@ public class StockQuoteCollector implements Runnable{
 		collector.addStockQuote("POM");
 		collector.addStockQuote("M");
 		(new Thread(collector)).start();
+	}
+	
+	public static void main(String args[]){
+		init();
 	}
 
 }
