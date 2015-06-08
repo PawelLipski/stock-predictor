@@ -5,12 +5,11 @@ import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.persistence.PreUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import pl.edu.agh.toik.stockpredictor.datacollection.StockQuoteCollector;
-import pl.edu.agh.toik.stockpredictor.prediction.IPredictionService;
+import pl.edu.agh.toik.stockpredictor.prediction.service.IPredictionService;
 
 import pl.edu.agh.toik.stockpredictor.prediction.Prediction;
 import pl.edu.agh.toik.stockpredictor.prediction.PredictionParams;
