@@ -9,10 +9,12 @@ import pl.edu.agh.toik.stockpredictor.technicalanalysis.serializer.StockQuote;
 
 import java.math.BigDecimal;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by grzegorz on 2015-05-18.
  */
+@Component
 public class PredictionServiceImpl implements IPredictionService {
 
     private IPredictionAlgorithm predictionAlgorithm;

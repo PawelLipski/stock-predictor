@@ -19,8 +19,6 @@
 
     <mvc:resources mapping="/static/**" location="/static/" />
 
-    <bean id="cl" class="pl.edu.agh.toik.stockpredictor.core.StockPredictorContextListener" />
-    
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
         destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
