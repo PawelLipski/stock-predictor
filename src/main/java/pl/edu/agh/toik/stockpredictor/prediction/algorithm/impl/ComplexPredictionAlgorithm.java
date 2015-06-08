@@ -7,20 +7,33 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * Created by grzegorz on 2015-06-08.
+ * Algorytm korzysta z modelu liniowego Holta wygladzania wykladniczego ciagow
+ * czasowych.
  */
 public class ComplexPredictionAlgorithm implements IPredictionAlgorithm {
 
-    //TODO: uzupełnić z ilu kursów algorytm korzysta
-    private static final int STOCKS_REQUIRED = 0;
+	private static final int STOCKS_REQUIRED = 20;
 
-    @Override
-    public BigDecimal predict(List<StockQuote> stockQuotes) {
-        //TODO
-        return null;
-    }
+	private final BigDecimal alfa = new BigDecimal("0.75");
+	private final BigDecimal alfaSubtracted = new BigDecimal(1).subtract(alfa);
+	private final BigDecimal beta = new BigDecimal("0.023");
+	private final BigDecimal betaSubtracted = new BigDecimal(1).subtract(beta);
 
-    public int getNumberOfStocksRequired() {
-        return STOCKS_REQUIRED;
-    }
+	@Override
+	public BigDecimal predict(List<StockQuote> stockQuotes) {
+		BigDecimal f1 = stockQuotes.get(0).getValue();
+		BigDecimal f2 = stockQuotes.get(1).getValue();
+		BigDecimal s = f2.subtract(f1);
+		for (int i = 2; i < STOCKS_REQUIRED; i++) {
+			f1 = f2;
+			f2 = stockQuotes.get(i).getValue().multiply(alfa)
+					.add(alfaSubtracted.multiply(f2.add(s)));
+			s = beta.multiply(f2.subtract(f1)).add(betaSubtracted.multiply(s));
+		}
+		return f2.add(s);
+	}
+
+	public int getNumberOfStocksRequired() {
+		return STOCKS_REQUIRED;
+	}
 }
