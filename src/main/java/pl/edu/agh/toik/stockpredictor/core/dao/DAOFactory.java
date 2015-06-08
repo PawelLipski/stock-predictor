@@ -7,7 +7,7 @@ package pl.edu.agh.toik.stockpredictor.core.dao;
 
 /**
  *
- * @author uriel
+ * @author Dariusz Hudziak
  */
 public interface DAOFactory {
     CompanyDAO newCompanyDAO();

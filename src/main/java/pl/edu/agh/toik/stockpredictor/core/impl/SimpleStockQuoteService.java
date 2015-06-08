@@ -116,7 +116,9 @@ public class SimpleStockQuoteService implements IStockQuoteService {
                                  quote.getValue()));   
        }
         
+       
        quoteDAO.store(entties);
+       quoteDAO.dropOlderThan(new Date(System.currentTimeMillis()-5184000000l));
     }
     
 }

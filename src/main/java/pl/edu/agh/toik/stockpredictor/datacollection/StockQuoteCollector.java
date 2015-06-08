@@ -104,6 +104,8 @@ public class StockQuoteCollector implements Runnable{
 				
 				StockQuote stockQuote = new StockQuote(listedCompany, date, new BigDecimal(valueMatcher.group(1)));
 				
+                                System.out.println( "save: "+stockQuote.getDateAndTime());
+                                
 				dataToSend.add(stockQuote);
 			}else{
 				throw new RuntimeException("StockQuoteCollector GET (" + serviceName + ") method on webservice did not succeed.");
@@ -120,7 +122,8 @@ public class StockQuoteCollector implements Runnable{
 				getStockQuotes();
 				Thread.sleep(updateRate);
 			} catch (Exception e) {
-				e.printStackTrace();
+				//e.printStackTrace();
+                                return;
 			}
 		}
 	}

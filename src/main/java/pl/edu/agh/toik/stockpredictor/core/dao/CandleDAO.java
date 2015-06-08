@@ -11,7 +11,7 @@ import pl.edu.agh.toik.stockpredictor.core.persistence.model.CandleEntity;
 
 /**
  *
- * @author uriel
+ * @author Dariusz Hudziak
  */
 public interface CandleDAO {
     List<CandleEntity> listCandlesFor(String company, Date fromDay, Date toDay);

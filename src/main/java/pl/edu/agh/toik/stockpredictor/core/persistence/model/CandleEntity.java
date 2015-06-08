@@ -22,7 +22,7 @@ import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.ListedCompany;
 
 /**
  *
- * @author uriel
+ * @author Dariusz Hudziak
  */
 @Entity
 @Table(name = "TBL_CANDLE")

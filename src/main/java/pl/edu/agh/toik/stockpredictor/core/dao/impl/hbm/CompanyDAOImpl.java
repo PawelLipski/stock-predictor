@@ -13,7 +13,7 @@ import pl.edu.agh.toik.stockpredictor.core.persistence.model.CompanyEntity;
 
 /**
  *
- * @author uriel
+ * @author Dariusz Hudziak
  */
 public class CompanyDAOImpl implements CompanyDAO  {
 

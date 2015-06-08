@@ -1,23 +1,21 @@
 package pl.edu.agh.toik.stockpredictor.core;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.persistence.PreUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import pl.edu.agh.toik.stockpredictor.core.dao.CandleDAO;
-import pl.edu.agh.toik.stockpredictor.core.dao.StockQuoteDAO;
+import pl.edu.agh.toik.stockpredictor.datacollection.StockQuoteCollector;
 import pl.edu.agh.toik.stockpredictor.prediction.IPredictionService;
 
 import pl.edu.agh.toik.stockpredictor.prediction.Prediction;
 import pl.edu.agh.toik.stockpredictor.prediction.PredictionParams;
-import pl.edu.agh.toik.stockpredictor.prediction.PredictionServiceImpl;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.chart.CandlestickChart;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.Candle;
-import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.Formation;
-import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.FormationType;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.domain.ListedCompany;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.serializer.StockQuote;
 import pl.edu.agh.toik.stockpredictor.technicalanalysis.service.ITechnicalAnalysisService;
@@ -51,6 +49,32 @@ public class Core implements ICoreCandlestickChartService,
 		this.predService = predService;
 	}
 
+        
+        private static StockQuoteCollector collector;
+        private static Thread collectorThread;
+        
+        
+        @PostConstruct
+        public void start() {
+            collector = new StockQuoteCollector(60,this);
+            collector.addStockQuote("POM");
+            collector.addStockQuote("M");
+            collectorThread = new Thread(collector);
+            collectorThread.setDaemon(true);
+            collectorThread.start();
+        }
+        
+        @PreDestroy
+        public void stop(){
+            stopDataCollection();
+        }
+        
+        public static void stopDataCollection(){
+            if(collectorThread !=null && collectorThread.isAlive()){
+                collectorThread.interrupt();
+                collectorThread=null;
+            }
+        }
 	
 
 	@Override

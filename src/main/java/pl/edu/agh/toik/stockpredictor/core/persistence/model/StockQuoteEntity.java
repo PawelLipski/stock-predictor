@@ -22,7 +22,7 @@ import pl.edu.agh.toik.stockpredictor.technicalanalysis.serializer.StockQuote;
 
 /**
  *
- * @author uriel
+ * @author Dariusz Hudziak
  */
 @Entity
 @Table(name = "TBL_STOCK_QUOTE")
@@ -35,7 +35,7 @@ public class StockQuoteEntity {
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "FKF_COMPANY")
     private CompanyEntity company;
-    @Column(name="FLD_DATE_TIME",nullable = false)
+    @Column(name="FLD_DATE_TIME",nullable = false,columnDefinition = "datetime")
     private Date dateTime;
     @Column(name="FLD_VALUE",nullable = false)
     private BigDecimal value;

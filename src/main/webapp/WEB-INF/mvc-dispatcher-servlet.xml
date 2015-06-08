@@ -19,6 +19,8 @@
 
     <mvc:resources mapping="/static/**" location="/static/" />
 
+    <bean id="cl" class="pl.edu.agh.toik.stockpredictor.core.StockPredictorContextListener" />
+    
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
         destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
@@ -42,7 +44,7 @@
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
                 <!--<prop key="hibernate.current_session_context_class">thread</prop>-->
                 <prop key="hibernate.show_sql">false</prop>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.hbm2ddl.auto">create</prop>
             </props>
         </property>
     </bean>
