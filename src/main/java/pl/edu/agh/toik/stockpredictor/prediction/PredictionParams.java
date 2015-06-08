@@ -10,6 +10,9 @@ public class PredictionParams {
     private ListedCompany listedCompany;
     private PredicitionMethod predicitionMethod;
 
+    
+    
+    
     public Date getDateFrom() {
         return dateFrom;
     }
