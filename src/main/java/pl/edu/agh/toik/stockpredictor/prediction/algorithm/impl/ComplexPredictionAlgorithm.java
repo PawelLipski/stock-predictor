@@ -21,10 +21,10 @@ public class ComplexPredictionAlgorithm implements IPredictionAlgorithm {
 
 	@Override
 	public BigDecimal predict(List<StockQuote> stockQuotes) {
-		BigDecimal f1 = stockQuotes.get(0).getValue();
-		BigDecimal f2 = stockQuotes.get(1).getValue();
+		BigDecimal f1 = stockQuotes.get(STOCKS_REQUIRED - 1).getValue();
+		BigDecimal f2 = stockQuotes.get(STOCKS_REQUIRED - 2).getValue();
 		BigDecimal s = f2.subtract(f1);
-		for (int i = 2; i < STOCKS_REQUIRED; i++) {
+		for (int i = STOCKS_REQUIRED - 3; i >= 0; i--) {
 			f1 = f2;
 			f2 = stockQuotes.get(i).getValue().multiply(alfa)
 					.add(alfaSubtracted.multiply(f2.add(s)));
